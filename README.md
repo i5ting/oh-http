@@ -30,7 +30,7 @@
 
 > HTTP协议是无状态协议
 
-区分session
+区分session是服务器的实现，而非http协议
 
 # Chrome调试与http
 
@@ -64,9 +64,7 @@ HTTP是一个客户端终端（用户）和服务器端（网站）请求和应�
 
 请求行和标题必须以<CR><LF>作为结尾。空行内必须只有<CR><LF>而无其他空格。在HTTP/1.1协议中，所有的请求头，除Host外，都是可选的。
 
-当我们在地址栏输入https://cnodejs.org/时，浏览器将显示cnode的首页。在这个过程中，浏览器都干了哪些事情呢？通过Network的记录，我们就可以知道，在Network中，定位到第一条记录，点击，右侧将显示Request Headers，点击右侧的view source，我们就可以看到浏览器发给cnode服务器的请求：
-
-![](img/http-request.png)
+当我们在地址栏输入https://cnodejs.org/时，浏览器将显示cnode的首页。在这个过程中，浏览器都干了哪些事情呢？通过Network的记录，我们就可以知道，在Network中，定位到第一条记录，点击，右侧将显示Request Headers，点击右侧的view source，我们就可以看到浏览器发给服务器的请求。
 
 ## URL
 
