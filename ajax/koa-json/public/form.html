@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='uft-8' />
+    <title> ajax with json </title>
+  </head>  
+<body>
+  <input type='text' name='username' value='i5ting' id='myname'/>
+  <div id="demo"><h2>把AJAX返回的数据放到这里</h2></div>
+  <button type="button" onclick="send_get_request()">发送get请求</button>
+  <button type="button" onclick="send_post_request()">发送post请求</button>
+
+  <script>
+    function send_get_request() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          // json parse
+          var data = JSON.parse(xhr.responseText)
+          // dom
+          document.getElementById("demo").innerHTML = "get返回的结果" + data.name;
+          // style
+          document.getElementById('demo').style.background = "green";
+        }
+      };
+      var myname = document.getElementById("myname").value
+      xhr.open("GET", "/api/get_json_with_param?name=" + myname, true);
+      xhr.send();
+    }
+    
+    function send_post_request() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          // json parse
+          var data = JSON.parse(xhr.responseText)
+          // dom
+          document.getElementById("demo").innerHTML = "post返回的结果" + data.name;
+          // style
+          document.getElementById('demo').style.background = "red";
+        }
+      };
+      xhr.open("POST", "/api/post_json_with_param", true);
+      xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      var myname = document.getElementById("myname").value
+      xhr.send("name=" + myname);
+    }
+  </script>
+</body>
+</html>
