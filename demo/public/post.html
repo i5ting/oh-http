@@ -1,0 +1,28 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>post-1 </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+		<script src='/javascripts/jquery.js'></script>
+  </head>
+  <body>
+    <h1>Post with x-www-form-urlencoded</h1>
+    
+  </body>
+</html>
+
+<script>
+$(function(){
+	$.ajaxSetup({
+	  contentType: "application/x-www-form-urlencoded; charset=utf-8"
+	});
+	
+	$.post("/users/post", { name: "i5a6", time: "2pm" },
+	   function(data){
+	     console.log(data);
+	   }, "json");
+		 
+});
+</script>

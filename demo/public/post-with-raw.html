@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>post-1 </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+		<script src='/javascripts/jquery.js'></script>
+  </head>
+  <body>
+    <h1>Post with form-data</h1>
+		<form method="post"action="/users/post/formdata" enctype="multipart/form-data">
+       <input type="text" name="desc">
+       <input type="file" name="pic">
+			 
+			 <input type="submit" value="提交">
+			 <input type="reset" value="重置">
+		 </form>
+  </body>
+</html>

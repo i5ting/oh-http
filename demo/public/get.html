@@ -1,0 +1,31 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>get </title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+		<script src='/javascripts/jquery.js'></script>
+  </head>
+  <body>
+    <h1>get</h1>
+    dssddssd
+		
+		
+		fdfddf
+  </body>
+</html>
+
+<script>
+$(function(){
+	$.ajaxSetup({
+	  contentType: "application/x-www-form-urlencoded; charset=utf-8"
+	});
+	$.post("/users/post", { name: "i5a6", time: "2pm" },
+	   function(data){
+	     process(data);
+	   }, "json");
+		 
+});
+	
+</script>
