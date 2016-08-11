@@ -26,7 +26,7 @@
 
 ![2](img/2.jpg)
 
-# 一定要记住：无状态
+# 一个记住：无状态
 
 > HTTP协议是无状态协议
 
@@ -78,7 +78,7 @@ URL一般由三部组成:
 
 这是一个完整的URL实例：
 
-http://www.runoob.com/nodejs/nodejs-url.html
+> https://cnodejs.org/topic/579391c32d740f7c26637e1b?a=1&b=2
 
 ## path
 
