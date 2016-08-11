@@ -1,0 +1,32 @@
+{
+  "name": "asynchronous-flow-control",
+  "version": "1.0.0",
+  "description": "InfoQ 前端之巅分享专业《深入浅出js（Node.js）异步流程控制》",
+  "main": "index.js",
+  "scripts": {
+    "start": "./generate.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i5ting/asynchronous-flow-control.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/i5ting/asynchronous-flow-control/issues"
+  },
+  "homepage": "https://github.com/i5ting/asynchronous-flow-control#readme",
+  "devDependencies": {
+    "ava": "^0.15.2",
+    "co-exec": "^1.1.0",
+    "gulp": "^3.8.10",
+    "gulp-gh-pages": "^0.4.0",
+    "gulp-open": "^0.3.1",
+    "gulp-rename": "^1.2.0",
+    "shelljs": "^0.3.0"
+  },
+  "dependencies": {
+    "debug": "^2.2.0"
+  }
+}
