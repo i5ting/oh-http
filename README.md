@@ -17,19 +17,22 @@
 
 ![Wilddog.006](img/wilddog.006.jpeg)
 
-# Chrome调试与http
 
-对于前、后、移动端来讲，Chrome调试都是必备技能，Chrome调试对于前端和移动端的重要性就不用讲了，对于用的最少的后端来说，多少要写些页面，而且后端大部分都有debug经验，所以掌握Chrome调试是非常简单的。
+# 三层架构
 
-![Wilddog.007](img/wilddog.007.jpeg)
+![Three Tier Architecture](img/three-tier-architecture.png)
 
 # 二个核心：req和res
 
 ![2](img/2.jpg)
 
-# 三层架构
+> HTTP协议是无状态协议
 
-![Three Tier Architecture](img/three-tier-architecture.png)
+# Chrome调试与http
+
+对于前、后、移动端来讲，Chrome调试都是必备技能，Chrome调试对于前端和移动端的重要性就不用讲了，对于用的最少的后端来说，多少要写些页面，而且后端大部分都有debug经验，所以掌握Chrome调试是非常简单的。
+
+![Wilddog.007](img/wilddog.007.jpeg)
 
 # http基础：GET/POST/上传
 
