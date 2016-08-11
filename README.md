@@ -6,6 +6,9 @@
 
 其实，你不必所有都掌握的，掌握下面这些就足够了
 
+- 三层架构
+- 二个核心：req和res
+- 一个记住：无状态
 - Chrome调试与http
 - http基础：GET/POST/上传
 - 表单
@@ -13,7 +16,7 @@
 - 使用Node.js实现服务端
 - 工具postman
 - 命令行cUrl
-- 总结：三层架构
+- 总结
 
 ![Wilddog.006](img/wilddog.006.jpeg)
 
