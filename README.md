@@ -26,7 +26,11 @@
 
 ![2](img/2.jpg)
 
+## 无状态
+
 > HTTP协议是无状态协议
+
+区分session
 
 # Chrome调试与http
 
