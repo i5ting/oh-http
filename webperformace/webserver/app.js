@@ -1,13 +1,9 @@
 var http = require('http');
 
 http.createServer(function(req, res){
-    console.log(req);
+  console.log(req);
 
-    if(req.url =='/'){
-      res.end('Hello world!');
-    }else if(req.url =='/2'){
-      res.end('Hello world!2');
-    }else{
-      res.end('Hello world! other');
-    }
+  res.writeHead(200, {'content-type':'text/html'});
+  res.write('<p>hi there!</p>');
+  res.end()
 }).listen(8888);
