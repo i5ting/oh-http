@@ -1377,4 +1377,28 @@ curl -d "{"a":"1","b":"2","c":{"a":"1","b":"2"}}" http://127.0.0.1:3001/users/po
 
 - 浏览器请求完整过程
 - 浏览器渲染
-- web性能优化
+
+# web性能优化
+
+- 01) 最简单的web server
+	- node http
+	- connect
+	- express
+- 02) http-request
+	- postman
+	- vscode debug
+	- req里的属性
+- 03) http-response
+	- 增加Expires 或 Cache-Control头部 
+	- 配置 ETags 
+	- Gzip压缩 
+	- Cookie
+- 04）网络优化
+	- 使用CDN 
+	- 压缩HTTP请求 
+	- 减少 DNS 查询
+	- 压缩 JavaScript 和 CSS 
+- 05) 其他
+
+
+见[webperformace](webperformace/Doc.md)

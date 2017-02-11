@@ -504,3 +504,23 @@ css
 - https://github.com/css/csso
 
 结合gulp构建工具更好，当然我们公司有ykit，更简单
+
+
+## 05) 其他
+
+- 对组件使用 Cookie-Free 域名 
+- 避免空的src 或 href 
+- 将样式放在上面 
+- 将脚本放到下面 
+- 避免 CSS 表达式，降低样式计算的范围和复杂度 
+- 评估样式计算的成本 
+- 将JavaScript 和 CSS 放到外面 
+- 避免重定向 
+- 移除重复脚本和样式 
+- 缓存 AJAX 请求 
+- 使用GET 处理 AJAX 请求 
+- 减少DOM元素数量 
+- 不要 404 
+- 避免 Filters 
+- 在HTML里不使用 Scale Images 
+- 保持favicon.ico 比较小并可缓存 
