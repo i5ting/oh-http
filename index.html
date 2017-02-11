@@ -74,8 +74,10 @@
 .highlight .err { border: 1px solid #FF0000 } /* Error */
 .highlight .k { color: #007020; font-weight: bold } /* Keyword */
 .highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #60a0b0; font-style: italic } /* Comment.Hashbang */
 .highlight .cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
 .highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .cpf { color: #60a0b0; font-style: italic } /* Comment.PreprocFile */
 .highlight .c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
 .highlight .cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
 .highlight .gd { color: #A00000 } /* Generic.Deleted */
@@ -115,8 +117,10 @@
 .highlight .mh { color: #40a070 } /* Literal.Number.Hex */
 .highlight .mi { color: #40a070 } /* Literal.Number.Integer */
 .highlight .mo { color: #40a070 } /* Literal.Number.Oct */
+.highlight .sa { color: #4070a0 } /* Literal.String.Affix */
 .highlight .sb { color: #4070a0 } /* Literal.String.Backtick */
 .highlight .sc { color: #4070a0 } /* Literal.String.Char */
+.highlight .dl { color: #4070a0 } /* Literal.String.Delimiter */
 .highlight .sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
 .highlight .s2 { color: #4070a0 } /* Literal.String.Double */
 .highlight .se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
@@ -127,9 +131,11 @@
 .highlight .s1 { color: #4070a0 } /* Literal.String.Single */
 .highlight .ss { color: #517918 } /* Literal.String.Symbol */
 .highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #06287e } /* Name.Function.Magic */
 .highlight .vc { color: #bb60d5 } /* Name.Variable.Class */
 .highlight .vg { color: #bb60d5 } /* Name.Variable.Global */
 .highlight .vi { color: #bb60d5 } /* Name.Variable.Instance */
+.highlight .vm { color: #bb60d5 } /* Name.Variable.Magic */
 .highlight .il { color: #40a070 } /* Literal.Number.Integer.Long */</style>
 <h1>精解http</h1>
 
@@ -233,22 +239,22 @@ URL一般由三部组成:
 <p>如果我们想访问<code>http://127.0.0.1:3000/topic?a=1</code>呢？</p>
 
 <p>http/query/app-2.js代码</p>
-<div class="highlight"><pre><span class="vg">const</span><span class="w"> </span><span class="vg">Koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa&#39;);</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Koa</span><span class="p">();</span>
+<div class="highlight"><pre><span></span>const Koa = require(&#39;koa&#39;);
+const app = new Koa();
 
-<span class="o">//</span><span class="w"> </span><span class="vg">response</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">ctx</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">path</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="c1">&#39;/topic&#39;) {</span>
-<span class="w">   </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="c1">&#39; Hello Koa &#39; + ctx.path + &#39; a=&#39;+ ctx.query[&#39;a&#39;];</span>
-<span class="w">  </span><span class="p">}</span>
+// response
+app.use(ctx =&gt; {
+  if (ctx.path === &#39;/topic&#39;) {
+   ctx.body = &#39; Hello Koa &#39; + ctx.path + &#39; a=&#39;+ ctx.query[&#39;a&#39;];
+  }
 
-<span class="w">   </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="c1">&#39; Hello Koa with default path = &#39; + ctx.path  ;</span>
-<span class="p">});</span>
+   ctx.body = &#39; Hello Koa with default path = &#39; + ctx.path  ;
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">);</span>
+app.listen(3000);
 </pre></div>
 <p>启动服务器</p>
-<div class="highlight"><pre><span class="nv">$ </span>node query/app-2.js
+<div class="highlight"><pre><span></span>$ node query/app-2.js
 </pre></div>
 <p>访问http://127.0.0.1:3000/topic?a=1</p>
 
@@ -263,20 +269,20 @@ URL一般由三部组成:
 <p>Koa最简单的获取querystring参数</p>
 
 <p>创建文件 http/query/app.js</p>
-<div class="highlight"><pre><span class="vg">const</span><span class="w"> </span><span class="vg">Koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa&#39;);</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Koa</span><span class="p">();</span>
+<div class="highlight"><pre><span></span>const Koa = require(&#39;koa&#39;);
+const app = new Koa();
 
-<span class="o">//</span><span class="w"> </span><span class="vg">response</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">ctx</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="c1">&#39;Hello Koa-&#39; + ctx.query[&#39;a&#39;];</span>
-<span class="p">});</span>
+// response
+app.use(ctx =&gt; {
+  ctx.body = &#39;Hello Koa-&#39; + ctx.query[&#39;a&#39;];
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">);</span>
+app.listen(3000);
 </pre></div>
 <p>注：ctx.query是ctx.request.query的别名，即ctx.query === ctx.request.query 。</p>
 
 <p>启动服务器</p>
-<div class="highlight"><pre><span class="nv">$ </span>node query/app.js
+<div class="highlight"><pre><span></span>$ node query/app.js
 </pre></div>
 <p>然后访问<code>http://127.0.0.1:3000/?a=1</code>,此时页面显示“Hello Koa-1”，这里的<code>1</code>即<code>ctx.query[&#39;a&#39;]</code></p>
 
@@ -318,25 +324,25 @@ HTTP状态码的英文为HTTP Status Code。
 <li>PUT  从客户端向服务器传送的数据取代指定的文档的内容。</li>
 <li>DELETE   请求服务器删除指定的页面。</li>
 </ol>
-<div class="highlight"><pre><span class="c1">// respond with &quot;Hello World!&quot; on the homepage</span>
-<span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(&#39;</span><span class="o">/</span><span class="nl">user:</span><span class="n">id</span><span class="p">&#39;,</span> <span class="k">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(&#39;</span><span class="n">Hello</span> <span class="n">World</span><span class="o">!</span><span class="p">&#39;);</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span>// respond with &quot;Hello World!&quot; on the homepage
+app.get(&#39;/user:id&#39;, function (req, res) {
+  res.send(&#39;Hello World!&#39;);
+});
 
-<span class="c1">// accept POST request on the homepage</span>
-<span class="n">app</span><span class="p">.</span><span class="n">post</span><span class="p">(&#39;</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">create</span><span class="p">&#39;,</span> <span class="k">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(&#39;</span><span class="n">Got</span> <span class="n">a</span> <span class="no">POST</span> <span class="n">request</span><span class="p">&#39;);</span>
-<span class="p">});</span>
+// accept POST request on the homepage
+app.post(&#39;/user/create&#39;, function (req, res) {
+  res.send(&#39;Got a POST request&#39;);
+});
 
-<span class="c1">// accept PUT request at /user</span>
-<span class="n">app</span><span class="p">.</span><span class="n">put</span><span class="p">(&#39;</span><span class="o">/</span><span class="n">user</span><span class="o">/:</span><span class="n">id</span><span class="p">&#39;,</span> <span class="k">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(&#39;</span><span class="n">Got</span> <span class="n">a</span> <span class="no">PUT</span> <span class="n">request</span> <span class="n">at</span> <span class="o">/</span><span class="n">user</span><span class="p">&#39;);</span>
-<span class="p">});</span>
+// accept PUT request at /user
+app.put(&#39;/user/:id&#39;, function (req, res) {
+  res.send(&#39;Got a PUT request at /user&#39;);
+});
 
-<span class="c1">// accept DELETE request at /user</span>
-<span class="n">app</span><span class="p">.</span><span class="n">delete</span><span class="p">(&#39;</span><span class="o">/</span><span class="n">user</span><span class="o">/:</span><span class="n">id</span><span class="p">&#39;,</span> <span class="k">function</span> <span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(&#39;</span><span class="n">Got</span> <span class="n">a</span> <span class="no">DELETE</span> <span class="n">request</span> <span class="n">at</span> <span class="o">/</span><span class="n">user</span><span class="p">&#39;);</span>
-<span class="p">});</span>
+// accept DELETE request at /user
+app.delete(&#39;/user/:id&#39;, function (req, res) {
+  res.send(&#39;Got a DELETE request at /user&#39;);
+});
 </pre></div>
 <p>更多node里的verbs实行，见 https://github.com/jshttp/methods/blob/master/index.js</p>
 
@@ -364,29 +370,29 @@ HTTP状态码的英文为HTTP Status Code。
 <h2>get</h2>
 
 <p>创建服务器 (http/get/app.js):</p>
-<div class="highlight"><pre><span class="vg">const</span><span class="w"> </span><span class="vg">Koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa&#39;);</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">bodyParser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="w"> </span><span class="p">(</span><span class="c1">&#39;koa-bodyparser&#39;);</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">route</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-router&#39;)();</span>
+<div class="highlight"><pre><span></span>const Koa = require(&#39;koa&#39;);
+const bodyParser = require (&#39;koa-bodyparser&#39;);
+const route = require(&#39;koa-router&#39;)();
 
-<span class="vg">const</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Koa</span><span class="p">();</span>
+const app = new Koa();
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">bodyParser</span><span class="p">());</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-static&#39;)(__dirname + &#39;/public&#39;));</span>
+app.use(bodyParser());
+app.use(require(&#39;koa-static&#39;)(__dirname + &#39;/public&#39;));
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">route</span><span class="o">.</span><span class="vg">routes</span><span class="p">())</span>
-<span class="w">   </span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">route</span><span class="o">.</span><span class="vg">allowedMethods</span><span class="p">());</span>
-<span class="vg">route</span><span class="o">.</span><span class="vg">get</span><span class="p">(</span><span class="c1">&#39;/topic&#39;, function (ctx, next) {</span>
-<span class="w">    </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="c1">&#39;Hello koa&#39; + ctx.query[&#39;a&#39;];</span>
-<span class="w">    </span><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="w"> </span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">query</span><span class="p">[</span><span class="c1">&#39;vehicle&#39;]);</span>
-<span class="p">});</span>
+app.use(route.routes())
+   .use(route.allowedMethods());
+route.get(&#39;/topic&#39;, function (ctx, next) {
+    ctx.body = &#39;Hello koa&#39; + ctx.query[&#39;a&#39;];
+    console.log (ctx.query[&#39;vehicle&#39;]);
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">);</span>
+app.listen(3000);
 </pre></div>
 <p>启动服务器</p>
-<div class="highlight"><pre><span class="nv">$ </span>node get/app.js
+<div class="highlight"><pre><span></span>$ node get/app.js
 </pre></div>
 <p>创建一段html表单代码（http/public/get.html）：</p>
-<div class="highlight"><pre><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;GET&quot;</span> <span class="na">action=</span><span class="s">&quot;/topic&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><span></span><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;GET&quot;</span> <span class="na">action=</span><span class="s">&quot;/topic&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;a&quot;</span> <span class="na">value=</span><span class="s">&#39;1&#39;</span><span class="nt">&gt;&lt;br&gt;&lt;br&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;sex&quot;</span> <span class="na">value=</span><span class="s">&quot;male&quot;</span><span class="nt">&gt;</span>Male<span class="nt">&lt;br&gt;&lt;br&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;sex&quot;</span> <span class="na">value=</span><span class="s">&quot;female&quot;</span><span class="nt">&gt;</span>Female<span class="nt">&lt;br&gt;&lt;br&gt;</span>
@@ -400,38 +406,38 @@ HTTP状态码的英文为HTTP Status Code。
 <p><img src="img/g1.png" alt=""></p>
 
 <p>在shell中输出</p>
-<div class="highlight"><pre><span class="vg">Car</span>
+<div class="highlight"><pre><span></span>Car
 </pre></div>
 <p>从上图可以看出，表单里的get数据实际会在url里的querystring里，会显示出来。</p>
 
 <h2>post</h2>
 
 <p>创建服务器 (http/post/app.js):</p>
-<div class="highlight"><pre><span class="vg">const</span><span class="w"> </span><span class="vg">Koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa&#39;);</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">bodyParser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="w"> </span><span class="p">(</span><span class="c1">&#39;koa-bodyparser&#39;);</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">route</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-router&#39;)();</span>
+<div class="highlight"><pre><span></span>const Koa = require(&#39;koa&#39;);
+const bodyParser = require (&#39;koa-bodyparser&#39;);
+const route = require(&#39;koa-router&#39;)();
 
-<span class="vg">const</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Koa</span><span class="p">();</span>
+const app = new Koa();
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">bodyParser</span><span class="p">());</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-static&#39;)(__dirname + &#39;/public&#39;));</span>
+app.use(bodyParser());
+app.use(require(&#39;koa-static&#39;)(__dirname + &#39;/public&#39;));
 
-<span class="o">//</span><span class="w"> </span><span class="vg">routes</span><span class="w"> </span><span class="vg">definition</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">route</span><span class="o">.</span><span class="vg">routes</span><span class="p">())</span>
-<span class="w">   </span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">route</span><span class="o">.</span><span class="vg">allowedMethods</span><span class="p">());</span>
+// routes definition
+app.use(route.routes())
+   .use(route.allowedMethods());
 
-<span class="vg">route</span><span class="o">.</span><span class="vg">post</span><span class="p">(</span><span class="c1">&#39;/toc/aaa&#39;, function (ctx, next) {</span>
-<span class="w">    </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">request</span><span class="o">.</span><span class="vg">body</span><span class="p">[</span><span class="c1">&#39;a&#39;];</span>
-<span class="w">    </span><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="w"> </span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">request</span><span class="o">.</span><span class="vg">body</span><span class="p">[</span><span class="c1">&#39;vehicle&#39;]);</span>
-<span class="p">});</span>
+route.post(&#39;/toc/aaa&#39;, function (ctx, next) {
+    ctx.body = ctx.request.body[&#39;a&#39;];
+    console.log (ctx.request.body[&#39;vehicle&#39;]);
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">);</span>
+app.listen(3000);
 </pre></div>
 <p>启动服务器</p>
-<div class="highlight"><pre><span class="nv">$ </span>node post/app.js
+<div class="highlight"><pre><span></span>$ node post/app.js
 </pre></div>
 <p>创建一段html表单代码（http/public/post.html）：</p>
-<div class="highlight"><pre><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;POST&quot;</span> <span class="na">action=</span><span class="s">&quot;/toc/aaa&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><span></span><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;POST&quot;</span> <span class="na">action=</span><span class="s">&quot;/toc/aaa&quot;</span><span class="nt">&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;a&quot;</span> <span class="na">value=</span><span class="s">&#39;1&#39;</span><span class="nt">&gt;&lt;br&gt;&lt;br&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;sex&quot;</span> <span class="na">value=</span><span class="s">&quot;male&quot;</span><span class="nt">&gt;</span>Male<span class="nt">&lt;br&gt;&lt;br&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;radio&quot;</span> <span class="na">name=</span><span class="s">&quot;sex&quot;</span> <span class="na">value=</span><span class="s">&quot;female&quot;</span><span class="nt">&gt;</span>Female<span class="nt">&lt;br&gt;&lt;br&gt;</span>
@@ -453,32 +459,32 @@ HTTP状态码的英文为HTTP Status Code。
 <h2>上传</h2>
 
 <p>安装中间件</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm install --save koa-multer
+<div class="highlight"><pre><span></span>$ npm install --save koa-multer
 </pre></div>
 <p>Koa中上传基本用法</p>
 
 <p>创建上传文件存储目录：(http/uploads)
 创建服务器 (http/app.js)</p>
-<div class="highlight"><pre><span class="vg">const</span><span class="w"> </span><span class="vg">Koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa&#39;);  // v2</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">router</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-router&#39;)(); // v6</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">multer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-multer&#39;);</span>
+<div class="highlight"><pre><span></span><span class="nt">const</span> <span class="nt">Koa</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;koa&#39;</span><span class="o">);</span>  <span class="o">//</span> <span class="nt">v2</span>
+<span class="nt">const</span> <span class="nt">router</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;koa-router&#39;</span><span class="o">)();</span> <span class="o">//</span> <span class="nt">v6</span>
+<span class="nt">const</span> <span class="nt">multer</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;koa-multer&#39;</span><span class="o">);</span>
 
-<span class="vg">const</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Koa</span><span class="p">();</span>
-<span class="vg">const</span><span class="w"> </span><span class="vg">upload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">multer</span><span class="p">({</span><span class="w"> </span><span class="nl">dest:</span><span class="w"> </span><span class="c1">&#39;uploads/&#39; });</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-static&#39;)(__dirname + &#39;/public&#39;));</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">router</span><span class="o">.</span><span class="vg">routes</span><span class="p">())</span>
-<span class="w">    </span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">router</span><span class="o">.</span><span class="vg">allowedMethods</span><span class="p">());</span>
+<span class="nt">const</span> <span class="nt">app</span> <span class="o">=</span> <span class="nt">new</span> <span class="nt">Koa</span><span class="o">();</span>
+<span class="nt">const</span> <span class="nt">upload</span> <span class="o">=</span> <span class="nt">multer</span><span class="o">(</span><span class="p">{</span> <span class="n">dest</span><span class="p">:</span> <span class="s1">&#39;uploads/&#39;</span> <span class="p">}</span><span class="o">);</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">use</span><span class="o">(</span><span class="nt">require</span><span class="o">(</span><span class="s1">&#39;koa-static&#39;</span><span class="o">)(</span><span class="nt">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/public&#39;</span><span class="o">));</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">use</span><span class="o">(</span><span class="nt">router</span><span class="p">.</span><span class="nc">routes</span><span class="o">())</span>
+    <span class="p">.</span><span class="nc">use</span><span class="o">(</span><span class="nt">router</span><span class="p">.</span><span class="nc">allowedMethods</span><span class="o">());</span>
 
-<span class="vg">router</span><span class="o">.</span><span class="vg">post</span><span class="p">(</span><span class="c1">&#39;/profile&#39;, upload.single(&#39;upfiles&#39;),function (ctx, next){</span>
-<span class="w">    </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;upload is success&quot;</span><span class="p">;</span>
-<span class="p">});</span>
+<span class="nt">router</span><span class="p">.</span><span class="nc">post</span><span class="o">(</span><span class="s1">&#39;/profile&#39;</span><span class="o">,</span> <span class="nt">upload</span><span class="p">.</span><span class="nc">single</span><span class="o">(</span><span class="s1">&#39;upfiles&#39;</span><span class="o">),</span><span class="nt">function</span> <span class="o">(</span><span class="nt">ctx</span><span class="o">,</span> <span class="nt">next</span><span class="o">)</span><span class="p">{</span>
+    <span class="err">ctx.body</span> <span class="err">=</span> <span class="err">&quot;upload</span> <span class="err">is</span> <span class="err">success&quot;</span><span class="p">;</span>
+<span class="p">}</span><span class="o">);</span>
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">);</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">listen</span><span class="o">(</span><span class="nt">3000</span><span class="o">);</span>
 </pre></div>
 <p>see more  https://github.com/koa-modules/multer 和 https://github.com/expressjs/multer</p>
 
 <p>启动服务器</p>
-<div class="highlight"><pre><span class="nv">$ </span>node app.js
+<div class="highlight"><pre><span></span>$ node app.js
 </pre></div>
 <p>创建一段html表单代码：(http/public/upload.html)
 <code>
@@ -523,18 +529,18 @@ HTTP状态码的英文为HTTP Status Code。
 </ul>
 
 <h3>示例helloworld演示</h3>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>ajax/helloworld
-<span class="nv">$ </span>ls
+<div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ajax/helloworld
+$ ls
 ajax_info.txt index.html
-<span class="nv">$ </span>hs . -p <span class="m">9090</span> -o 
+$ hs . -p <span class="m">9090</span> -o 
 Starting up http-server, serving .
 Available on:
   http://127.0.0.1:9090
   http://192.168.1.105:9090
 Hit CTRL-C to stop the server
-<span class="o">[</span>Thu May <span class="m">26</span> <span class="m">2016</span> 22:32:54 GMT+0800 <span class="o">(</span>CST<span class="o">)]</span> <span class="s2">&quot;GET /&quot;</span> <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36&quot;</span>
-<span class="o">[</span>Thu May <span class="m">26</span> <span class="m">2016</span> 22:32:55 GMT+0800 <span class="o">(</span>CST<span class="o">)]</span> <span class="s2">&quot;GET /favicon.ico&quot;</span> <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36&quot;</span>
-<span class="o">[</span>Thu May <span class="m">26</span> <span class="m">2016</span> 22:32:55 GMT+0800 <span class="o">(</span>CST<span class="o">)]</span> <span class="s2">&quot;GET /favicon.ico&quot;</span> Error <span class="o">(</span>404<span class="o">)</span>: <span class="s2">&quot;Not found&quot;</span>
+<span class="o">[</span>Thu May <span class="m">26</span> <span class="m">2016</span> <span class="m">22</span>:32:54 GMT+0800 <span class="o">(</span>CST<span class="o">)]</span> <span class="s2">&quot;GET /&quot;</span> <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36&quot;</span>
+<span class="o">[</span>Thu May <span class="m">26</span> <span class="m">2016</span> <span class="m">22</span>:32:55 GMT+0800 <span class="o">(</span>CST<span class="o">)]</span> <span class="s2">&quot;GET /favicon.ico&quot;</span> <span class="s2">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36&quot;</span>
+<span class="o">[</span>Thu May <span class="m">26</span> <span class="m">2016</span> <span class="m">22</span>:32:55 GMT+0800 <span class="o">(</span>CST<span class="o">)]</span> <span class="s2">&quot;GET /favicon.ico&quot;</span> Error <span class="o">(</span><span class="m">404</span><span class="o">)</span>: <span class="s2">&quot;Not found&quot;</span>
 </pre></div>
 <p>启动服务器命令说明</p>
 
@@ -554,33 +560,33 @@ Hit CTRL-C to stop the server
 <h3>源码解析</h3>
 
 <p>index.html</p>
-<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&#39;uft-8&#39;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;title&gt;</span> ajax hello world <span class="nt">&lt;/title&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>  
-<span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;demo&quot;</span><span class="nt">&gt;&lt;h2&gt;</span>把AJAX返回的数据放到这里<span class="nt">&lt;/h2&gt;&lt;/div&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">onclick=</span><span class="s">&quot;send_ajax_request()&quot;</span><span class="nt">&gt;</span>改变内容<span class="nt">&lt;/button&gt;</span>
+<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#39;uft-8&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span> ajax hello world <span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>  
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;demo&quot;</span><span class="p">&gt;&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>把AJAX返回的数据放到这里<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;send_ajax_request()&quot;</span><span class="p">&gt;</span>改变内容<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 
-  <span class="nt">&lt;script&gt;</span>
-    function send_ajax_request() {
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 <span class="err">&amp;&amp;</span> xhr.status == 200) {
-          // dom
-          document.getElementById(&quot;demo&quot;).innerHTML = xhr.responseText;
-          // style
-          document.getElementById(&#39;demo&#39;).style.background = &quot;lightblue&quot;;
-        }
-      };
-      xhr.open(&quot;GET&quot;, &quot;ajax_info.txt&quot;, true);
-      xhr.send();
-    }
-  <span class="nt">&lt;/script&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="kd">function</span> <span class="nx">send_ajax_request</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+      <span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// dom</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+          <span class="c1">// style</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;demo&#39;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="s2">&quot;lightblue&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">};</span>
+      <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;ajax_info.txt&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+      <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </pre></div>
 <p>四步骤要点</p>
 
@@ -589,41 +595,41 @@ Hit CTRL-C to stop the server
 </ul>
 
 <p>给按钮增加onclick事件，在点击的时候调用send_ajax_request()</p>
-<div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">onclick=</span><span class="s">&quot;send_ajax_request()&quot;</span><span class="nt">&gt;</span>改变内容<span class="nt">&lt;/button&gt;</span>
+<div class="highlight"><pre><span></span><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">onclick=</span><span class="s">&quot;send_ajax_request()&quot;</span><span class="nt">&gt;</span>改变内容<span class="nt">&lt;/button&gt;</span>
 </pre></div>
 <ul>
 <li>发送ajax请求（此时是request发送）</li>
 </ul>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">xhr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">XMLHttpRequest</span><span class="p">();</span>
-<span class="vg">xhr</span><span class="o">.</span><span class="vg">onreadystatechange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">xhr</span><span class="o">.</span><span class="vg">readyState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="il">4</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="vg">xhr</span><span class="o">.</span><span class="vg">status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="il">200</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">       </span><span class="o">...</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">};</span>
-<span class="vg">xhr</span><span class="o">.</span><span class="vg">open</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ajax_info.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="vg">true</span><span class="p">);</span>
-<span class="vg">xhr</span><span class="o">.</span><span class="vg">send</span><span class="p">();</span>
+<div class="highlight"><pre><span></span>var xhr = new XMLHttpRequest();
+xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+       ...
+    }
+};
+xhr.open(&quot;GET&quot;, &quot;ajax_info.txt&quot;, true);
+xhr.send();
 </pre></div>
 <p>在创建XHR对象后，接着我们要调用一个初始化方法open()，它接受五个参数具体定义如下：</p>
-<div class="highlight"><pre><span class="vg">void</span><span class="w"> </span><span class="vg">open</span><span class="p">(</span>
-<span class="w">   </span><span class="vg">DOMString</span><span class="w"> </span><span class="vg">method</span><span class="p">,</span><span class="w"> </span><span class="o">//</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;DELETE&quot;</span>
-<span class="w">   </span><span class="vg">DOMString</span><span class="w"> </span><span class="vg">url</span><span class="p">,</span>
-<span class="w">   </span><span class="vg">optional</span><span class="w"> </span><span class="vg">boolean</span><span class="w"> </span><span class="vg">async</span><span class="p">,</span>
-<span class="w">   </span><span class="vg">optional</span><span class="w"> </span><span class="vg">DOMString</span><span class="w"> </span><span class="vg">user</span><span class="p">,</span>
-<span class="w">   </span><span class="vg">optional</span><span class="w"> </span><span class="vg">DOMString</span><span class="w"> </span><span class="vg">password</span>
-<span class="p">);</span>
+<div class="highlight"><pre><span></span>void open(
+   DOMString method, //&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;
+   DOMString url,
+   optional boolean async,
+   optional DOMString user,
+   optional DOMString password
+);
 </pre></div>
 <p>这是完成的ajax请求代码，实际发送请求是通过send方法，即</p>
-<div class="highlight"><pre><span class="vg">xhr</span><span class="o">.</span><span class="vg">send</span><span class="p">();</span>
+<div class="highlight"><pre><span></span>xhr.send();
 </pre></div>
 <ul>
 <li>处理ajax请求结果，无论成功还是失败（此时是response处理）</li>
 </ul>
-<div class="highlight"><pre><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">xhr</span><span class="o">.</span><span class="vg">readyState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="il">4</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="vg">xhr</span><span class="o">.</span><span class="vg">status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="il">200</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="vg">dom</span>
-<span class="w">          </span><span class="vg">document</span><span class="o">.</span><span class="vg">getElementById</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">)</span><span class="o">.</span><span class="vg">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">xhr</span><span class="o">.</span><span class="vg">responseText</span><span class="p">;</span>
-<span class="w">          </span><span class="o">//</span><span class="w"> </span><span class="vg">style</span>
-<span class="w">          </span><span class="vg">document</span><span class="o">.</span><span class="vg">getElementById</span><span class="p">(</span><span class="c1">&#39;demo&#39;).style.background = &quot;lightblue&quot;;</span>
-<span class="w">        </span><span class="p">}</span>
+<div class="highlight"><pre><span></span>if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+          // dom
+          document.getElementById(&quot;demo&quot;).innerHTML = xhr.responseText;
+          // style
+          document.getElementById(&#39;demo&#39;).style.background = &quot;lightblue&quot;;
+        }
 </pre></div>
 <p>onreadystatechange 事件</p>
 
@@ -659,10 +665,10 @@ Hit CTRL-C to stop the server
 </ul>
 
 <p>对页面进行dom操作</p>
-<div class="highlight"><pre><span class="vg">document</span><span class="o">.</span><span class="vg">getElementById</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">)</span><span class="o">.</span><span class="vg">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">xhr</span><span class="o">.</span><span class="vg">responseText</span><span class="p">;</span>
+<div class="highlight"><pre><span></span>document.getElementById(&quot;demo&quot;).innerHTML = xhr.responseText;
 </pre></div>
 <p>对页面进行css样式操作</p>
-<div class="highlight"><pre><span class="vg">document</span><span class="o">.</span><span class="vg">getElementById</span><span class="p">(</span><span class="c1">&#39;demo&#39;).style.background = &quot;lightblue&quot;;</span>
+<div class="highlight"><pre><span></span>document.getElementById(&#39;demo&#39;).style.background = &quot;lightblue&quot;;
 </pre></div>
 <h3>问题</h3>
 
@@ -695,9 +701,9 @@ Hit CTRL-C to stop the server
 </blockquote>
 
 <h3>简单的json api示例</h3>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>book-source/http/ajax/json
-<span class="nv">$ </span>hs . -p <span class="m">9091</span> -o
-<span class="nv">$ </span>ls
+<div class="highlight"><pre><span></span>$ <span class="nb">cd</span> book-source/http/ajax/json
+$ hs . -p <span class="m">9091</span> -o
+$ ls
 data.json  index.html
 </pre></div>
 <p>源码说明</p>
@@ -708,55 +714,55 @@ data.json  index.html
 </ul>
 
 <p>data.json</p>
-<div class="highlight"><pre><span class="p">{</span>
-<span class="w">  </span><span class="s2">&quot;content&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ajax_info里的数据&quot;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span>{
+  &quot;content&quot;: &quot;ajax_info里的数据&quot;
+}
 </pre></div>
 <p>index.html</p>
-<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&#39;uft-8&#39;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;title&gt;</span> ajax with json <span class="nt">&lt;/title&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>  
-<span class="nt">&lt;body&gt;</span>
-  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;demo&quot;</span><span class="nt">&gt;&lt;h2&gt;</span>把AJAX返回的数据放到这里<span class="nt">&lt;/h2&gt;&lt;/div&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">onclick=</span><span class="s">&quot;send_ajax_request()&quot;</span><span class="nt">&gt;</span>改变内容<span class="nt">&lt;/button&gt;</span>
+<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#39;uft-8&#39;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span> ajax with json <span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>  
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;demo&quot;</span><span class="p">&gt;&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>把AJAX返回的数据放到这里<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;send_ajax_request()&quot;</span><span class="p">&gt;</span>改变内容<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 
-  <span class="nt">&lt;script&gt;</span>
-    function send_ajax_request() {
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 <span class="err">&amp;&amp;</span> xhr.status == 200) {
-          // json parse
-          var data = JSON.parse(xhr.responseText)
-          // dom
-          document.getElementById(&quot;demo&quot;).innerHTML = data.content;
-          // style
-          document.getElementById(&#39;demo&#39;).style.background = &quot;lightblue&quot;;
-        }
-      };
-      xhr.open(&quot;GET&quot;, &quot;data.json&quot;, true);
-      xhr.send();
-    }
-  <span class="nt">&lt;/script&gt;</span>
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="kd">function</span> <span class="nx">send_ajax_request</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+      <span class="nx">xhr</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">==</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="nx">xhr</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// json parse</span>
+          <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">responseText</span><span class="p">)</span>
+          <span class="c1">// dom</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">content</span><span class="p">;</span>
+          <span class="c1">// style</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;demo&#39;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span> <span class="s2">&quot;lightblue&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">};</span>
+      <span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;data.json&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+      <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </pre></div>
 <p>相比较之前的text方式，差异如下</p>
 
 <p>1)请求地址变了，是&quot;data.json&quot;</p>
-<div class="highlight"><pre><span class="vg">xhr</span><span class="o">.</span><span class="vg">open</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;data.json&quot;</span><span class="p">,</span><span class="w"> </span><span class="vg">true</span><span class="p">);</span>
+<div class="highlight"><pre><span></span>xhr.open(&quot;GET&quot;, &quot;data.json&quot;, true);
 </pre></div>
 <p>2）处理完成后，先解析xhr.responseText为json，对页面进行dom操作或css样式操作</p>
-<div class="highlight"><pre><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">xhr</span><span class="o">.</span><span class="vg">readyState</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="il">4</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="vg">xhr</span><span class="o">.</span><span class="vg">status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="il">200</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="err">先解析</span><span class="vg">xhr</span><span class="o">.</span><span class="vg">responseText</span><span class="err">为</span><span class="vg">json</span>
-<span class="w">    </span><span class="vg">var</span><span class="w"> </span><span class="vg">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">JSON</span><span class="o">.</span><span class="vg">parse</span><span class="p">(</span><span class="vg">xhr</span><span class="o">.</span><span class="vg">responseText</span><span class="p">)</span>
-<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="vg">dom</span>
-<span class="w">    </span><span class="vg">document</span><span class="o">.</span><span class="vg">getElementById</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">)</span><span class="o">.</span><span class="vg">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">data</span><span class="o">.</span><span class="vg">content</span><span class="p">;</span>
-<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="vg">style</span>
-<span class="w">    </span><span class="vg">document</span><span class="o">.</span><span class="vg">getElementById</span><span class="p">(</span><span class="c1">&#39;demo&#39;).style.background = &quot;lightblue&quot;;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span>if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+    // 先解析xhr.responseText为json
+    var data = JSON.parse(xhr.responseText)
+    // dom
+    document.getElementById(&quot;demo&quot;).innerHTML = data.content;
+    // style
+    document.getElementById(&#39;demo&#39;).style.background = &quot;lightblue&quot;;
+}
 </pre></div>
 <p>其他操作都是一样的。</p>
 
@@ -790,42 +796,42 @@ data.json  index.html
 <p>1) 第一步<code>npm init</code>，会生成package.json文件</p>
 
 <p>2) 安装依赖</p>
-<div class="highlight"><pre><span class="nv">$ </span>npm i -S koa@next
-<span class="nv">$ </span>npm i -S koa-static@next
+<div class="highlight"><pre><span></span>$ npm i -S koa@next
+$ npm i -S koa-static@next
 </pre></div>
 <p>在package.json里会自动增加2条依赖</p>
-<div class="highlight"><pre><span class="s2">&quot;dependencies&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="s2">&quot;koa&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^2.0.0&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="s2">&quot;koa-static&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;^3.0.0&quot;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span>&quot;dependencies&quot;: {
+    &quot;koa&quot;: &quot;^2.0.0&quot;,
+    &quot;koa-static&quot;: &quot;^3.0.0&quot;
+}
 </pre></div>
 <p>3) 创建app.js</p>
-<div class="highlight"><pre><span class="nv">$ </span>touch app.js
+<div class="highlight"><pre><span></span>$ touch app.js
 </pre></div>
 <p>在app.js里放入下面代码即可</p>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">serve</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-static&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">Koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Koa</span><span class="p">();</span>
+<div class="highlight"><pre><span></span>var serve = require(&#39;koa-static&#39;);
+var Koa = require(&#39;koa&#39;);
+var app = new Koa();
 
-<span class="o">//</span><span class="w"> </span><span class="err">启用静态</span><span class="vg">httpserver</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">serve</span><span class="p">(</span><span class="vg">__dirname</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1">&#39;/public&#39;));</span>
+// 启用静态httpserver
+app.use(serve(__dirname + &#39;/public&#39;));
 
-<span class="o">//</span><span class="w"> </span><span class="err">定义</span><span class="vg">json</span><span class="err">接口</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">ctx</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">path</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="c1">&#39;/api/json&#39;) {</span>
-<span class="w">    </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="s2">&quot;content&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ajax_info里的数据&quot;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="vg">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;请使用 /api/json 作为请求地址&quot;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">});</span>
+// 定义json接口
+app.use(ctx =&gt; {
+  if (ctx.path === &#39;/api/json&#39;) {
+    ctx.body = {
+      &quot;content&quot;: &quot;ajax_info里的数据&quot;
+    }
+  } else {
+    ctx.body = {
+      &quot;error&quot;: &quot;请使用 /api/json 作为请求地址&quot;
+    }
+  }
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">);</span>
+app.listen(3000);
 
-<span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="c1">&#39;listening on port 3000&#39;);</span>
+console.log(&#39;listening on port 3000&#39;);
 </pre></div>
 <p>说明</p>
 
@@ -835,18 +841,18 @@ data.json  index.html
 </ul>
 
 <p>4）启动、测试</p>
-<div class="highlight"><pre><span class="nv">$ </span>node app.js 
-listening on port 3000
+<div class="highlight"><pre><span></span>$ node app.js 
+listening on port <span class="m">3000</span>
 </pre></div>
 <p>在浏览器里打开http://127.0.0.1:3000/api/json</p>
 
 <p>返回如下</p>
-<div class="highlight"><pre><span class="c1">// 20160527073015</span>
-<span class="c1">// http://127.0.0.1:3000/api/json</span>
+<div class="highlight"><pre><span></span>// 20160527073015
+// http://127.0.0.1:3000/api/json
 
-<span class="p">{</span>
-  <span class="s">&quot;content&quot;</span><span class="o">:</span> <span class="s">&quot;ajax_info里的数据&quot;</span>
-<span class="p">}</span>
+{
+  &quot;content&quot;: &quot;ajax_info里的数据&quot;
+}
 </pre></div>
 <p>更多，模拟接口的见https://github.com/typicode/json-server</p>
 
@@ -855,43 +861,43 @@ listening on port 3000
 <h3>get</h3>
 
 <p>get请求是通过querystring进行传值</p>
-<div class="highlight"><pre><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">path</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="c1">&#39;/api/get_json_with_param&#39;) {</span>
-<span class="w">    </span><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">query</span><span class="p">)</span>
-<span class="w">    </span><span class="vg">var</span><span class="w"> </span><span class="vg">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">query</span><span class="o">.</span><span class="vg">name</span>
-<span class="w">    </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="s2">&quot;content&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ajax_info里的数据&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="vg">name</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span>if (ctx.path === &#39;/api/get_json_with_param&#39;) {
+    console.log(ctx.query)
+    var name = ctx.query.name
+    ctx.body = {
+        &quot;content&quot;: &quot;ajax_info里的数据&quot;,
+        &quot;name&quot;: name
+    }
+}
 </pre></div>
 <p>http://127.0.0.1:3000/api/get_json_with_param?name=i5ting</p>
 
 <h3>post</h3>
 
 <p>koa默认是不支持post请求的，需要使用bodyparser模块</p>
-<div class="highlight"><pre><span class="vg">npm</span><span class="w"> </span><span class="vg">i</span><span class="w"> </span><span class="o">-</span><span class="vg">S</span><span class="w"> </span><span class="vg">koa</span><span class="o">-</span><span class="vg">bodyparser@next</span>
+<div class="highlight"><pre><span></span>npm i -S koa-bodyparser@next
 </pre></div>
 <p>修改app.js代码</p>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">serve</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-static&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">bodyParser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa-bodyparser&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">Koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;koa&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Koa</span><span class="p">();</span>
+<div class="highlight"><pre><span></span>var serve = require(&#39;koa-static&#39;);
+var bodyParser = require(&#39;koa-bodyparser&#39;);
+var Koa = require(&#39;koa&#39;);
+var app = new Koa();
 
-<span class="o">//</span><span class="w"> </span><span class="err">处理</span><span class="vg">post</span><span class="err">请求</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">bodyParser</span><span class="p">());</span>
+// 处理post请求
+app.use(bodyParser());
 
-<span class="o">//</span><span class="w"> </span><span class="err">启用静态</span><span class="vg">httpserver</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">serve</span><span class="p">(</span><span class="vg">__dirname</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1">&#39;/public&#39;));</span>
+// 启用静态httpserver
+app.use(serve(__dirname + &#39;/public&#39;));
 </pre></div>
 <p>下面来看一下post请求代码如何处理</p>
-<div class="highlight"><pre><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">path</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="c1">&#39;/api/post_json_with_param&#39;) {</span>
-<span class="w">    </span><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">request</span><span class="o">.</span><span class="vg">body</span><span class="p">)</span>
-<span class="w">    </span><span class="vg">var</span><span class="w"> </span><span class="vg">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">request</span><span class="o">.</span><span class="vg">body</span><span class="o">.</span><span class="vg">name</span>
-<span class="w">    </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="s2">&quot;content&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ajax_info里的数据&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="vg">name</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span>if (ctx.path === &#39;/api/post_json_with_param&#39;) {
+    console.log(ctx.request.body)
+    var name = ctx.request.body.name
+    ctx.body = {
+        &quot;content&quot;: &quot;ajax_info里的数据&quot;,
+        &quot;name&quot;: name
+    }
+}
 </pre></div>
 <p>get请求可以在浏览器里显示的测试，而post是不能直接通过url测试的，所以为了简便，我们这里使用chrome的插件postman测试。注意post的类型是x-www-form-urlencoded。</p>
 
@@ -916,12 +922,12 @@ listening on port 3000
 <p>在使用Ajax前，需要下载jQuery库，并在页面中引入<code>&lt;script src=&quot;jquery.js&quot;&gt;&lt;/script&gt;</code>。</p>
 
 <p>我们这里使用最多的jQuery库举例</p>
-<div class="highlight"><pre><span class="err">$</span><span class="o">.</span><span class="vg">get</span><span class="p">(</span><span class="s2">&quot;test.cgi&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">name:</span><span class="w"> </span><span class="s2">&quot;John&quot;</span><span class="p">,</span><span class="w"> </span><span class="nl">time:</span><span class="w"> </span><span class="s2">&quot;2pm&quot;</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="vg">function</span><span class="p">(</span><span class="w"> </span><span class="vg">data</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="err">处理</span><span class="vg">ajax</span><span class="err">请求结果</span>
-<span class="w">    </span><span class="vg">alert</span><span class="p">(</span><span class="w"> </span><span class="s2">&quot;Data Loaded: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="vg">data</span><span class="w"> </span><span class="p">);</span>
-<span class="w">    </span><span class="o">//</span><span class="w"> </span><span class="err">根据业务，对页面进行</span><span class="vg">dom</span><span class="err">操作或</span><span class="vg">css</span><span class="err">样式操作</span>
-<span class="w">    </span><span class="err">$</span><span class="p">(</span><span class="vg">sss</span><span class="p">)</span><span class="o">.</span><span class="vg">html</span><span class="p">()</span><span class="o">.</span><span class="vg">css</span><span class="p">()</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><span class="o">$</span><span class="p">.</span><span class="nc">get</span><span class="o">(</span><span class="s2">&quot;test.cgi&quot;</span><span class="o">,</span> <span class="p">{</span> <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">:</span> <span class="s2">&quot;2pm&quot;</span> <span class="p">}</span><span class="o">,</span> <span class="nt">function</span><span class="o">(</span> <span class="nt">data</span> <span class="o">)</span> <span class="p">{</span>
+    <span class="err">//</span> <span class="err">处理ajax请求结果</span>
+    <span class="err">alert(</span> <span class="err">&quot;Data</span> <span class="n">Loaded</span><span class="p">:</span> <span class="err">&quot;</span> <span class="o">+</span> <span class="n">data</span> <span class="p">);</span>
+    <span class="err">//</span> <span class="err">根据业务，对页面进行dom操作或css样式操作</span>
+    <span class="err">$(sss).html().css()</span>
+<span class="p">}</span><span class="o">);</span>
 </pre></div>
 <ul>
 <li>使用$.get或$.post发送ajax请求。可以理解它是对原生的xhr封装</li>
@@ -934,42 +940,42 @@ listening on port 3000
 <p>jQuery Ajax使用方法与 Ajax 相似，写接口、创建服务器、启动服务器，与Ajax相同，这里不再重复。</p>
 
 <p>给出app.js 源码</p>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">koa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="w"> </span><span class="p">(</span><span class="c1">&#39;koa&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">serve</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="w"> </span><span class="p">(</span><span class="c1">&#39;koa-static&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">bodyParser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="w"> </span><span class="p">(</span><span class="c1">&#39;koa-bodyparser&#39;);</span>
+<div class="highlight"><pre><span></span>var koa = require (&#39;koa&#39;);
+var serve = require (&#39;koa-static&#39;);
+var bodyParser = require (&#39;koa-bodyparser&#39;);
 
-<span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">koa</span><span class="p">();</span>
+var app = new koa();
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="w"> </span><span class="p">(</span><span class="vg">bodyParser</span><span class="p">());</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="w"> </span><span class="p">(</span><span class="vg">serve</span><span class="p">(</span><span class="vg">__dirname</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1">&#39;/public&#39;));</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="vg">ctx</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">if</span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">path</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="c1">&#39;/api/get_json_with_param&#39;){</span>
-<span class="w">        </span><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">query</span><span class="p">);</span>
-<span class="w">        </span><span class="vg">var</span><span class="w"> </span><span class="vg">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">query</span><span class="o">.</span><span class="vg">name</span><span class="p">;</span>
-<span class="w">        </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="s2">&quot;content&quot;</span><span class="o">:</span><span class="s2">&quot;ajax_info里的数据&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="vg">name</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="vg">else</span><span class="w"> </span><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">path</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="c1">&#39;/api/post_json_with_param&#39;) {</span>
-<span class="w">        </span><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="vg">ctx</span><span class="o">.</span><span class="vg">request</span><span class="o">.</span><span class="vg">body</span><span class="p">)</span>
-<span class="w">        </span><span class="vg">var</span><span class="w"> </span><span class="vg">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">request</span><span class="o">.</span><span class="vg">body</span><span class="o">.</span><span class="vg">name</span>
-<span class="w">        </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="s2">&quot;content&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;post_json_with_param里的数据&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="vg">name</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="vg">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="vg">ctx</span><span class="o">.</span><span class="vg">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="s2">&quot;error&quot;</span><span class="o">:</span><span class="s2">&quot;请使用 /api/json 作为请求地址&quot;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">});</span>
+app.use (bodyParser());
+app.use (serve(__dirname + &#39;/public&#39;));
+app.use ( ctx =&gt; {
+    if(ctx.path === &#39;/api/get_json_with_param&#39;){
+        console.log(ctx.query);
+        var name = ctx.query.name;
+        ctx.body = {
+            &quot;content&quot;:&quot;ajax_info里的数据&quot;,
+            &quot;name&quot;: name
+        }
+    } else if (ctx.path === &#39;/api/post_json_with_param&#39;) {
+        console.log(ctx.request.body)
+        var name = ctx.request.body.name
+        ctx.body = {
+            &quot;content&quot;: &quot;post_json_with_param里的数据&quot;,
+            &quot;name&quot;: name
+        }
+    } else {
+        ctx.body = {
+            &quot;error&quot;:&quot;请使用 /api/json 作为请求地址&quot;
+        }
+    }
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">);</span>
+app.listen(3000);
 
-<span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;listening on port 3000&quot;</span><span class="p">);</span>
+console.log (&quot;listening on port 3000&quot;);
 </pre></div>
 <p>启动服务器</p>
-<div class="highlight"><pre><span class="err">$</span><span class="vg">node</span><span class="w"> </span><span class="vg">app</span><span class="o">.</span><span class="vg">js</span>
+<div class="highlight"><pre><span></span>$node app.js
 </pre></div>
 <p>以表单为例，介绍如何使用$.get或$.post发送ajax请求</p>
 
@@ -1001,7 +1007,7 @@ listening on port 3000
 <li>data (Map)(可选参数) 要发送给服务器的数据，以 Key/value 的键值对形式表示，会做为QueryString附加到请求URL中</li>
 <li>callback (Callback) (可选参数) 载入成功时回调函数(只有当Response的返回状态是success才是调用该方法)，该函数接受两个参数，第一个为服务器返回的数据，第二个参数为服务器的状态。</li>
 </ul>
-<div class="highlight"><pre>  <span class="nt">&lt;form&gt;</span> 
+<div class="highlight"><pre><span></span>  <span class="nt">&lt;form&gt;</span> 
     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&#39;text&#39;</span> <span class="na">name=</span><span class="s">&#39;username&#39;</span> <span class="na">value=</span><span class="s">&#39;i5ting&#39;</span> <span class="na">id=</span><span class="s">&#39;myname&#39;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;demo&quot;</span><span class="nt">&gt;&lt;h2&gt;</span>把AJAX返回的数据放到这里<span class="nt">&lt;/h2&gt;&lt;/div&gt;</span>
     <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;bt1&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>发送get请求<span class="nt">&lt;/button&gt;</span>
@@ -1029,7 +1035,7 @@ listening on port 3000
 - data (Map)(可选参数) 要发送给服务器的数据，以 Key/value 的键值对形式表示
 - callback (Callback) (可选参数) 载入成功时回调函数(只有当Response的返回状态是success才是调用该方法)
 - type (String) (可选参数) 请求数据的类型，xml,text,json等,如果我们设置这个参数为：json，那么返回的格式则是json格式的，如果没有设置，就 和$.get()返回的格式一样，都是字符串的</p>
-<div class="highlight"><pre>  <span class="nt">&lt;form&gt;</span> 
+<div class="highlight"><pre><span></span>  <span class="nt">&lt;form&gt;</span> 
     <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&#39;text&#39;</span> <span class="na">name=</span><span class="s">&#39;username&#39;</span> <span class="na">value=</span><span class="s">&#39;i5ting&#39;</span> <span class="na">id=</span><span class="s">&#39;myname&#39;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;demo&quot;</span><span class="nt">&gt;&lt;h2&gt;</span>把AJAX返回的数据放到这里<span class="nt">&lt;/h2&gt;&lt;/div&gt;</span>
     <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;bt1&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>发送get请求<span class="nt">&lt;/button&gt;</span>
@@ -1065,9 +1071,9 @@ listening on port 3000
 </ul>
 
 <h3>req.params</h3>
-<div class="highlight"><pre><span class="vg">app</span><span class="o">.</span><span class="vg">get</span><span class="p">(</span><span class="c1">&#39;/user/:id&#39;, function(req, res){</span>
-<span class="w">  </span><span class="vg">res</span><span class="o">.</span><span class="vg">send</span><span class="p">(</span><span class="c1">&#39;user &#39; + req.params.id);</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span>app.get(&#39;/user/:id&#39;, function(req, res){
+  res.send(&#39;user &#39; + req.params.id);
+});
 </pre></div>
 <p>俗点：取带冒号的参数</p>
 
@@ -1076,18 +1082,18 @@ listening on port 3000
 <p>Contains key-value pairs of data submitted in the request body. By default, it is undefined, and is populated when you use body-parsing middleware such as body-parser and multer.</p>
 
 <p>This example shows how to use body-parsing middleware to populate req.body.</p>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;express&#39;)();</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">bodyParser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;body-parser&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">multer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;multer&#39;); </span>
+<div class="highlight"><pre><span></span><span class="nt">var</span> <span class="nt">app</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;express&#39;</span><span class="o">)();</span>
+<span class="nt">var</span> <span class="nt">bodyParser</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;body-parser&#39;</span><span class="o">);</span>
+<span class="nt">var</span> <span class="nt">multer</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;multer&#39;</span><span class="o">);</span> 
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">bodyParser</span><span class="o">.</span><span class="vg">json</span><span class="p">());</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="vg">for</span><span class="w"> </span><span class="vg">parsing</span><span class="w"> </span><span class="vg">application</span><span class="o">/</span><span class="vg">json</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">bodyParser</span><span class="o">.</span><span class="vg">urlencoded</span><span class="p">({</span><span class="w"> </span><span class="nl">extended:</span><span class="w"> </span><span class="vg">true</span><span class="w"> </span><span class="p">}));</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="vg">for</span><span class="w"> </span><span class="vg">parsing</span><span class="w"> </span><span class="vg">application</span><span class="o">/</span><span class="vg">x</span><span class="o">-</span><span class="vg">www</span><span class="o">-</span><span class="vg">form</span><span class="o">-</span><span class="vg">urlencoded</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">multer</span><span class="p">());</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="vg">for</span><span class="w"> </span><span class="vg">parsing</span><span class="w"> </span><span class="vg">multipart</span><span class="o">/</span><span class="vg">form</span><span class="o">-</span><span class="vg">data</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">use</span><span class="o">(</span><span class="nt">bodyParser</span><span class="p">.</span><span class="nc">json</span><span class="o">());</span> <span class="o">//</span> <span class="nt">for</span> <span class="nt">parsing</span> <span class="nt">application</span><span class="o">/</span><span class="nt">json</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">use</span><span class="o">(</span><span class="nt">bodyParser</span><span class="p">.</span><span class="nc">urlencoded</span><span class="o">(</span><span class="p">{</span> <span class="n">extended</span><span class="p">:</span> <span class="n">true</span> <span class="p">}</span><span class="o">));</span> <span class="o">//</span> <span class="nt">for</span> <span class="nt">parsing</span> <span class="nt">application</span><span class="o">/</span><span class="nt">x-www-form-urlencoded</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">use</span><span class="o">(</span><span class="nt">multer</span><span class="o">());</span> <span class="o">//</span> <span class="nt">for</span> <span class="nt">parsing</span> <span class="nt">multipart</span><span class="o">/</span><span class="nt">form-data</span>
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">post</span><span class="p">(</span><span class="c1">&#39;/&#39;, function (req, res) {</span>
-<span class="w">  </span><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="vg">req</span><span class="o">.</span><span class="vg">body</span><span class="p">);</span>
-<span class="w">  </span><span class="vg">res</span><span class="o">.</span><span class="vg">json</span><span class="p">(</span><span class="vg">req</span><span class="o">.</span><span class="vg">body</span><span class="p">);</span>
-<span class="p">})</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">post</span><span class="o">(</span><span class="s1">&#39;/&#39;</span><span class="o">,</span> <span class="nt">function</span> <span class="o">(</span><span class="nt">req</span><span class="o">,</span> <span class="nt">res</span><span class="o">)</span> <span class="p">{</span>
+  <span class="err">console.log(req.body)</span><span class="p">;</span>
+  <span class="err">res.json(req.body)</span><span class="p">;</span>
+<span class="p">}</span><span class="o">)</span>
 </pre></div>
 <p>可以肯定的一点是req.body一定是post请求，express里依赖的中间件必须有bodyParser，不然req.body是没有的。</p>
 
@@ -1098,50 +1104,50 @@ listening on port 3000
 <p>query是querystring</p>
 
 <p>说明req.query不一定是get</p>
-<div class="highlight"><pre><span class="c1">// GET /search?q=tobi+ferret</span>
-<span class="n">req</span><span class="p">.</span><span class="n">query</span><span class="p">.</span><span class="n">q</span>
-<span class="c1">// =&gt; &quot;tobi ferret&quot;</span>
+<div class="highlight"><pre><span></span>// GET /search?q=tobi+ferret
+req.query.q
+// =&gt; &quot;tobi ferret&quot;
 
-<span class="c1">// GET /shoes?order=desc&amp;shoe[color]=blue&amp;shoe[type]=converse</span>
-<span class="n">req</span><span class="p">.</span><span class="n">query</span><span class="p">.</span><span class="n">order</span>
-<span class="c1">// =&gt; &quot;desc&quot;</span>
+// GET /shoes?order=desc&amp;shoe[color]=blue&amp;shoe[type]=converse
+req.query.order
+// =&gt; &quot;desc&quot;
 
-<span class="n">req</span><span class="p">.</span><span class="n">query</span><span class="p">.</span><span class="n">shoe</span><span class="p">.</span><span class="n">color</span>
-<span class="c1">// =&gt; &quot;blue&quot;</span>
+req.query.shoe.color
+// =&gt; &quot;blue&quot;
 
-<span class="n">req</span><span class="p">.</span><span class="n">query</span><span class="p">.</span><span class="n">shoe</span><span class="p">.</span><span class="k">type</span>
-<span class="c1">// =&gt; &quot;converse&quot;</span>
+req.query.shoe.type
+// =&gt; &quot;converse&quot;
 </pre></div>
 <p>因为有变态的写法</p>
-<div class="highlight"><pre><span class="c1">// POST /search?q=tobi+ferret</span>
-<span class="p">{</span><span class="nl">a:</span><span class="mh">1</span><span class="p">,</span><span class="nl">b:</span><span class="mh">2</span><span class="p">}</span>
-<span class="n">req</span><span class="p">.</span><span class="n">query</span><span class="p">.</span><span class="n">q</span>
-<span class="c1">// =&gt; &quot;tobi ferret&quot;</span>
+<div class="highlight"><pre><span></span>// POST /search?q=tobi+ferret
+{a:1,b:2}
+req.query.q
+// =&gt; &quot;tobi ferret&quot;
 </pre></div>
 <p>post里看不的，用req.body取。</p>
 
 <h2>准备工作</h2>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">express</span><span class="p">();</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">multer</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;multer&#39;)</span>
+<div class="highlight"><pre><span></span>var app = express();
+var multer  = require(&#39;multer&#39;)
 
-<span class="o">//</span><span class="w"> </span><span class="vg">for</span><span class="w"> </span><span class="vg">raw</span><span class="w"> </span><span class="vg">data</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">function</span><span class="p">(</span><span class="vg">req</span><span class="p">,</span><span class="w"> </span><span class="vg">res</span><span class="p">,</span><span class="w"> </span><span class="vg">next</span><span class="p">){</span>
-<span class="w">  </span><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">req</span><span class="o">.</span><span class="vg">is</span><span class="p">(</span><span class="c1">&#39;text/*&#39;)) {</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="c1">&#39;&#39;;</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">setEncoding</span><span class="p">(</span><span class="c1">&#39;utf8&#39;);</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">on</span><span class="p">(</span><span class="c1">&#39;data&#39;, function(chunk){ req.text += chunk });</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">on</span><span class="p">(</span><span class="c1">&#39;end&#39;, next);</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="vg">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">next</span><span class="p">();</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">});</span>
+// for raw data
+app.use(function(req, res, next){
+  if (req.is(&#39;text/*&#39;)) {
+    req.text = &#39;&#39;;
+    req.setEncoding(&#39;utf8&#39;);
+    req.on(&#39;data&#39;, function(chunk){ req.text += chunk });
+    req.on(&#39;end&#39;, next);
+  } else {
+    next();
+  }
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">multer</span><span class="p">({</span><span class="w"> </span>
-<span class="w">    </span><span class="nl">dest:</span><span class="w"> </span><span class="c1">&#39;./uploads/&#39;,</span>
-<span class="w">  </span><span class="nl">rename:</span><span class="w"> </span><span class="vg">function</span><span class="w"> </span><span class="p">(</span><span class="vg">fieldname</span><span class="p">,</span><span class="w"> </span><span class="vg">filename</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">return</span><span class="w"> </span><span class="vg">filename</span><span class="o">.</span><span class="vg">replace</span><span class="p">(</span><span class="o">/\</span><span class="vg">W</span><span class="o">+/</span><span class="vg">g</span><span class="p">,</span><span class="w"> </span><span class="c1">&#39;-&#39;).toLowerCase() + Date.now()</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}))</span>
+app.use(multer({ 
+    dest: &#39;./uploads/&#39;,
+  rename: function (fieldname, filename) {
+    return filename.replace(/\W+/g, &#39;-&#39;).toLowerCase() + Date.now()
+  }
+}))
 </pre></div>
 <p>说明</p>
 
@@ -1151,42 +1157,42 @@ listening on port 3000
 </ul>
 
 <h2>3种不同类型的post</h2>
-<div class="highlight"><pre><span class="n">var</span> <span class="n">express</span> <span class="o">=</span> <span class="n">require</span><span class="p">(</span><span class="c">&#39;express&#39;);</span>
-<span class="n">var</span> <span class="n">router</span> <span class="o">=</span> <span class="n">express</span><span class="p">.</span><span class="n">Router</span><span class="p">()</span><span class="err">;</span>
+<div class="highlight"><pre><span></span>var express = require(&#39;express&#39;);
+var router = express.Router();
 
-<span class="o">/*</span> <span class="k">GET</span> <span class="n">users</span> <span class="n">listing</span><span class="p">.</span> <span class="o">*/</span>
-<span class="n">router</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="c">&#39;/&#39;, function(req, res) {</span>
-  <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="c">&#39;respond with a resource&#39;);</span>
-<span class="p">})</span><span class="err">;</span>
+/* GET users listing. */
+router.get(&#39;/&#39;, function(req, res) {
+  res.send(&#39;respond with a resource&#39;);
+});
 
-<span class="n">router</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="c">&#39;/:id&#39;, function(req, res) {</span>
-  <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="c">&#39;respond with a resource&#39; + request.params.id);</span>
-<span class="p">})</span><span class="err">;</span>
+router.get(&#39;/:id&#39;, function(req, res) {
+  res.send(&#39;respond with a resource&#39; + request.params.id);
+});
 
-<span class="n">router</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="c">&#39;/post&#39;, function(req, res) {</span>
-  <span class="o">//</span> <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="c">&#39;respond with a resource&#39;);</span>
-    <span class="n">res</span><span class="p">.</span><span class="n">json</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">body</span><span class="p">)</span><span class="err">;</span>
-<span class="p">})</span><span class="err">;</span>
+router.post(&#39;/post&#39;, function(req, res) {
+  // res.send(&#39;respond with a resource&#39;);
+    res.json(req.body);
+});
 
-<span class="n">router</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="c">&#39;/post/formdata&#39;, function(req, res) {</span>
-  <span class="o">//</span> <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="c">&#39;respond with a resource&#39;);</span>
-    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">body</span><span class="p">,</span> <span class="n">req</span><span class="p">.</span><span class="n">files</span><span class="p">)</span><span class="err">;</span>
-    <span class="n">console</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">files</span><span class="p">.</span><span class="n">pic</span><span class="p">.</span><span class="n">path</span><span class="p">)</span><span class="err">;</span>
-    <span class="n">res</span><span class="p">.</span><span class="n">json</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">body</span><span class="p">)</span><span class="err">;</span>
-<span class="p">})</span><span class="err">;</span>
+router.post(&#39;/post/formdata&#39;, function(req, res) {
+  // res.send(&#39;respond with a resource&#39;);
+    console.log(req.body, req.files);
+    console.log(req.files.pic.path);
+    res.json(req.body);
+});
 
-<span class="n">router</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="c">&#39;/post/raw&#39;, function(req, res) {</span>
-  <span class="o">//</span> <span class="n">res</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="c">&#39;respond with a resource&#39;);</span>
-    <span class="n">res</span><span class="p">.</span><span class="n">json</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">text</span><span class="p">)</span><span class="err">;</span>
-<span class="p">})</span><span class="err">;</span>
+router.post(&#39;/post/raw&#39;, function(req, res) {
+  // res.send(&#39;respond with a resource&#39;);
+    res.json(req.text);
+});
 
 
-<span class="n">module</span><span class="p">.</span><span class="n">exports</span> <span class="o">=</span> <span class="n">router</span><span class="err">;</span>
+module.exports = router;
 </pre></div>
 <h3>Post with x-www-form-urlencoded</h3>
 
 <p>see post.html</p>
-<div class="highlight"><pre>    <span class="nt">&lt;script&gt;</span>
+<div class="highlight"><pre><span></span>    <span class="nt">&lt;script&gt;</span>
     $(function(){
         $.ajaxSetup({
           contentType: &quot;application/x-www-form-urlencoded; charset=utf-8&quot;
@@ -1201,28 +1207,28 @@ listening on port 3000
     <span class="nt">&lt;/script&gt;</span>
 </pre></div>
 <p>in routes/users.js</p>
-<div class="highlight"><pre><span class="w">    </span><span class="vg">router</span><span class="o">.</span><span class="vg">post</span><span class="p">(</span><span class="c1">&#39;/post&#39;, function(req, res) {</span>
-<span class="w">      </span><span class="o">//</span><span class="w"> </span><span class="vg">res</span><span class="o">.</span><span class="vg">send</span><span class="p">(</span><span class="c1">&#39;respond with a resource&#39;);</span>
-<span class="w">        </span><span class="vg">res</span><span class="o">.</span><span class="vg">json</span><span class="p">(</span><span class="vg">req</span><span class="o">.</span><span class="vg">body</span><span class="p">);</span>
-<span class="w">    </span><span class="p">});</span>
+<div class="highlight"><pre><span></span>    router.post(&#39;/post&#39;, function(req, res) {
+      // res.send(&#39;respond with a resource&#39;);
+        res.json(req.body);
+    });
 </pre></div>
 <p><img src="img/post-common.png" alt=""></p>
 
 <h3>Post with form-data</h3>
 
 <p>主要目的是为了上传</p>
-<div class="highlight"><pre><span class="vg">npm</span><span class="w"> </span><span class="vg">install</span><span class="w"> </span><span class="o">--</span><span class="vg">save</span><span class="w"> </span><span class="vg">multer</span>
+<div class="highlight"><pre><span></span>npm install --save multer
 </pre></div>
 <p>Usage</p>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;express&#39;)</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">multer</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;multer&#39;)</span>
+<div class="highlight"><pre><span></span>var express = require(&#39;express&#39;)
+var multer  = require(&#39;multer&#39;)
 
-<span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">express</span><span class="p">()</span>
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">multer</span><span class="p">({</span><span class="w"> </span><span class="nl">dest:</span><span class="w"> </span><span class="c1">&#39;./uploads/&#39;}))</span>
+var app = express()
+app.use(multer({ dest: &#39;./uploads/&#39;}))
 </pre></div>
 <p>You can access the fields and files in the request object:</p>
-<div class="highlight"><pre><span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="vg">req</span><span class="o">.</span><span class="vg">body</span><span class="p">)</span>
-<span class="vg">console</span><span class="o">.</span><span class="vg">log</span><span class="p">(</span><span class="vg">req</span><span class="o">.</span><span class="vg">files</span><span class="p">)</span>
+<div class="highlight"><pre><span></span>console.log(req.body)
+console.log(req.files)
 </pre></div>
 <p>重要提示： Multer will not process any form which is not multipart/form-data</p>
 
@@ -1239,25 +1245,25 @@ listening on port 3000
 <p>req.rawBody已经被干掉了，现在只能用req.text</p>
 
 <p>下面是tj给出的代码片段</p>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;./&#39;)</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">express</span><span class="p">();</span>
+<div class="highlight"><pre><span></span>var express = require(&#39;./&#39;)
+var app = express();
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">use</span><span class="p">(</span><span class="vg">function</span><span class="p">(</span><span class="vg">req</span><span class="p">,</span><span class="w"> </span><span class="vg">res</span><span class="p">,</span><span class="w"> </span><span class="vg">next</span><span class="p">){</span>
-<span class="w">  </span><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">req</span><span class="o">.</span><span class="vg">is</span><span class="p">(</span><span class="c1">&#39;text/*&#39;)) {</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="c1">&#39;&#39;;</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">setEncoding</span><span class="p">(</span><span class="c1">&#39;utf8&#39;);</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">on</span><span class="p">(</span><span class="c1">&#39;data&#39;, function(chunk){ req.text += chunk });</span>
-<span class="w">    </span><span class="vg">req</span><span class="o">.</span><span class="vg">on</span><span class="p">(</span><span class="c1">&#39;end&#39;, next);</span>
-<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="vg">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">next</span><span class="p">();</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">});</span>
+app.use(function(req, res, next){
+  if (req.is(&#39;text/*&#39;)) {
+    req.text = &#39;&#39;;
+    req.setEncoding(&#39;utf8&#39;);
+    req.on(&#39;data&#39;, function(chunk){ req.text += chunk });
+    req.on(&#39;end&#39;, next);
+  } else {
+    next();
+  }
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">post</span><span class="p">(</span><span class="c1">&#39;/&#39;, function(req, res){</span>
-<span class="w">  </span><span class="vg">res</span><span class="o">.</span><span class="vg">send</span><span class="p">(</span><span class="c1">&#39;got &quot;&#39; + req.text + &#39;&quot;&#39;);</span>
-<span class="p">});</span>
+app.post(&#39;/&#39;, function(req, res){
+  res.send(&#39;got &quot;&#39; + req.text + &#39;&quot;&#39;);
+});
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">listen</span><span class="p">(</span><span class="il">3000</span><span class="p">)</span>
+app.listen(3000)
 </pre></div>
 <p><img src="img/post-rawdata.png" alt=""></p>
 
@@ -1269,59 +1275,59 @@ listening on port 3000
 <li>https://github.com/visionmedia/supertest</li>
 <li>https://github.com/i5ting/superkoa</li>
 </ul>
-<div class="highlight"><pre><span class="vg">var</span><span class="w"> </span><span class="vg">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;supertest&#39;);</span>
-<span class="vg">var</span><span class="w"> </span><span class="vg">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;express&#39;);</span>
+<div class="highlight"><pre><span></span><span class="nt">var</span> <span class="nt">request</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;supertest&#39;</span><span class="o">);</span>
+<span class="nt">var</span> <span class="nt">express</span> <span class="o">=</span> <span class="nt">require</span><span class="o">(</span><span class="s1">&#39;express&#39;</span><span class="o">);</span>
 
-<span class="vg">var</span><span class="w"> </span><span class="vg">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">express</span><span class="p">();</span>
+<span class="nt">var</span> <span class="nt">app</span> <span class="o">=</span> <span class="nt">express</span><span class="o">();</span>
 
-<span class="vg">app</span><span class="o">.</span><span class="vg">get</span><span class="p">(</span><span class="c1">&#39;/user&#39;, function(req, res) {</span>
-<span class="w">  </span><span class="vg">res</span><span class="o">.</span><span class="vg">status</span><span class="p">(</span><span class="il">200</span><span class="p">)</span><span class="o">.</span><span class="vg">json</span><span class="p">({</span><span class="w"> </span><span class="nl">name:</span><span class="w"> </span><span class="c1">&#39;tobi&#39; });</span>
-<span class="p">});</span>
+<span class="nt">app</span><span class="p">.</span><span class="nc">get</span><span class="o">(</span><span class="s1">&#39;/user&#39;</span><span class="o">,</span> <span class="nt">function</span><span class="o">(</span><span class="nt">req</span><span class="o">,</span> <span class="nt">res</span><span class="o">)</span> <span class="p">{</span>
+  <span class="err">res.status(200).json({</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;tobi&#39;</span> <span class="p">}</span><span class="o">);</span>
+<span class="err">}</span><span class="o">);</span>
 
-<span class="vg">request</span><span class="p">(</span><span class="vg">app</span><span class="p">)</span>
-<span class="w">  </span><span class="o">.</span><span class="vg">get</span><span class="p">(</span><span class="c1">&#39;/user&#39;)</span>
-<span class="w">  </span><span class="o">.</span><span class="vg">expect</span><span class="p">(</span><span class="c1">&#39;Content-Type&#39;, /json/)</span>
-<span class="w">  </span><span class="o">.</span><span class="vg">expect</span><span class="p">(</span><span class="c1">&#39;Content-Length&#39;, &#39;15&#39;)</span>
-<span class="w">  </span><span class="o">.</span><span class="vg">expect</span><span class="p">(</span><span class="il">200</span><span class="p">)</span>
-<span class="w">  </span><span class="o">.</span><span class="vg">end</span><span class="p">(</span><span class="vg">function</span><span class="p">(</span><span class="vg">err</span><span class="p">,</span><span class="w"> </span><span class="vg">res</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">if</span><span class="w"> </span><span class="p">(</span><span class="vg">err</span><span class="p">)</span><span class="w"> </span><span class="vg">throw</span><span class="w"> </span><span class="vg">err</span><span class="p">;</span>
-<span class="w">  </span><span class="p">});</span>
+<span class="nt">request</span><span class="o">(</span><span class="nt">app</span><span class="o">)</span>
+  <span class="p">.</span><span class="nc">get</span><span class="o">(</span><span class="s1">&#39;/user&#39;</span><span class="o">)</span>
+  <span class="p">.</span><span class="nc">expect</span><span class="o">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">,</span> <span class="o">/</span><span class="nt">json</span><span class="o">/)</span>
+  <span class="p">.</span><span class="nc">expect</span><span class="o">(</span><span class="s1">&#39;Content-Length&#39;</span><span class="o">,</span> <span class="s1">&#39;15&#39;</span><span class="o">)</span>
+  <span class="p">.</span><span class="nc">expect</span><span class="o">(</span><span class="nt">200</span><span class="o">)</span>
+  <span class="p">.</span><span class="nc">end</span><span class="o">(</span><span class="nt">function</span><span class="o">(</span><span class="nt">err</span><span class="o">,</span> <span class="nt">res</span><span class="o">)</span> <span class="p">{</span>
+    <span class="err">if</span> <span class="err">(err)</span> <span class="err">throw</span> <span class="err">err</span><span class="p">;</span>
+  <span class="p">}</span><span class="o">);</span>
 </pre></div>
 <h2>集成测试：有ui界面的</h2>
 
 <p>https://github.com/assaf/zombie</p>
-<div class="highlight"><pre><span class="vg">const</span><span class="w"> </span><span class="vg">Browser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">require</span><span class="p">(</span><span class="c1">&#39;zombie&#39;);</span>
+<div class="highlight"><pre><span></span>const Browser = require(&#39;zombie&#39;);
 
-<span class="o">//</span><span class="w"> </span><span class="vg">We</span><span class="c1">&#39;re going to make requests to http://example.com/signup</span>
-<span class="o">//</span><span class="w"> </span><span class="vg">Which</span><span class="w"> </span><span class="vg">will</span><span class="w"> </span><span class="vg">be</span><span class="w"> </span><span class="vg">routed</span><span class="w"> </span><span class="vg">to</span><span class="w"> </span><span class="vg">our</span><span class="w"> </span><span class="vg">test</span><span class="w"> </span><span class="vg">server</span><span class="w"> </span><span class="nl">localhost:</span><span class="il">3000</span>
-<span class="vg">Browser</span><span class="o">.</span><span class="vg">localhost</span><span class="p">(</span><span class="c1">&#39;example.com&#39;, 3000);</span>
+// We&#39;re going to make requests to http://example.com/signup
+// Which will be routed to our test server localhost:3000
+Browser.localhost(&#39;example.com&#39;, 3000);
 
-<span class="vg">describe</span><span class="p">(</span><span class="c1">&#39;User visits signup page&#39;, function() {</span>
+describe(&#39;User visits signup page&#39;, function() {
 
-<span class="w">  </span><span class="vg">const</span><span class="w"> </span><span class="vg">browser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="vg">new</span><span class="w"> </span><span class="vg">Browser</span><span class="p">();</span>
+  const browser = new Browser();
 
-<span class="w">  </span><span class="vg">before</span><span class="p">(</span><span class="vg">function</span><span class="p">(</span><span class="vg">done</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="vg">browser</span><span class="o">.</span><span class="vg">visit</span><span class="p">(</span><span class="c1">&#39;/signup&#39;, done);</span>
-<span class="w">  </span><span class="p">});</span>
+  before(function(done) {
+    browser.visit(&#39;/signup&#39;, done);
+  });
 
-<span class="w">  </span><span class="vg">describe</span><span class="p">(</span><span class="c1">&#39;submits form&#39;, function() {</span>
+  describe(&#39;submits form&#39;, function() {
 
-<span class="w">    </span><span class="vg">before</span><span class="p">(</span><span class="vg">function</span><span class="p">(</span><span class="vg">done</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="vg">browser</span>
-<span class="w">        </span><span class="o">.</span><span class="vg">fill</span><span class="p">(</span><span class="c1">&#39;email&#39;,    &#39;zombie@underworld.dead&#39;)</span>
-<span class="w">        </span><span class="o">.</span><span class="vg">fill</span><span class="p">(</span><span class="c1">&#39;password&#39;, &#39;eat-the-living&#39;)</span>
-<span class="w">        </span><span class="o">.</span><span class="vg">pressButton</span><span class="p">(</span><span class="c1">&#39;Sign Me Up!&#39;, done);</span>
-<span class="w">    </span><span class="p">});</span>
+    before(function(done) {
+      browser
+        .fill(&#39;email&#39;,    &#39;zombie@underworld.dead&#39;)
+        .fill(&#39;password&#39;, &#39;eat-the-living&#39;)
+        .pressButton(&#39;Sign Me Up!&#39;, done);
+    });
 
-<span class="w">    </span><span class="vg">it</span><span class="p">(</span><span class="c1">&#39;should be successful&#39;, function() {</span>
-<span class="w">      </span><span class="vg">browser</span><span class="o">.</span><span class="vg">assert</span><span class="o">.</span><span class="vg">success</span><span class="p">();</span>
-<span class="w">    </span><span class="p">});</span>
+    it(&#39;should be successful&#39;, function() {
+      browser.assert.success();
+    });
 
-<span class="w">    </span><span class="vg">it</span><span class="p">(</span><span class="c1">&#39;should see welcome page&#39;, function() {</span>
-<span class="w">      </span><span class="vg">browser</span><span class="o">.</span><span class="vg">assert</span><span class="o">.</span><span class="vg">text</span><span class="p">(</span><span class="c1">&#39;title&#39;, &#39;Welcome To Brains Depot&#39;);</span>
-<span class="w">    </span><span class="p">});</span>
-<span class="w">  </span><span class="p">});</span>
-<span class="p">});</span>
+    it(&#39;should see welcome page&#39;, function() {
+      browser.assert.text(&#39;title&#39;, &#39;Welcome To Brains Depot&#39;);
+    });
+  });
+});
 </pre></div>
 <h2>更多</h2>
 
@@ -1374,7 +1380,7 @@ listening on port 3000
 </blockquote>
 
 <h1>命令行cUrl</h1>
-<div class="highlight"><pre><span class="c">#! /bin/bash</span>
+<div class="highlight"><pre><span></span><span class="ch">#! /bin/bash</span>
 
 <span class="nb">echo</span> -n <span class="s2">&quot;post common&quot;</span>
 curl -d <span class="s2">&quot;a=1&amp;b=2&quot;</span> http://127.0.0.1:3001/users/post
@@ -1384,7 +1390,7 @@ curl -F <span class="s1">&#39;pic=@&quot;img/post-common.png&quot;&#39;</span> -
 
 <span class="nb">echo</span> -n <span class="s1">&#39;post raw json&#39;</span>
 
-curl -d <span class="s2">&quot;{&quot;</span>a<span class="s2">&quot;:&quot;</span>1<span class="s2">&quot;,&quot;</span>b<span class="s2">&quot;:&quot;</span>2<span class="s2">&quot;,&quot;</span>c<span class="s2">&quot;:{&quot;</span>a<span class="s2">&quot;:&quot;</span>1<span class="s2">&quot;,&quot;</span>b<span class="s2">&quot;:&quot;</span>2<span class="s2">&quot;}}&quot;</span> http://127.0.0.1:3001/users/post
+curl -d <span class="s2">&quot;{&quot;</span>a<span class="s2">&quot;:&quot;</span><span class="m">1</span><span class="s2">&quot;,&quot;</span>b<span class="s2">&quot;:&quot;</span><span class="m">2</span><span class="s2">&quot;,&quot;</span>c<span class="s2">&quot;:{&quot;</span>a<span class="s2">&quot;:&quot;</span><span class="m">1</span><span class="s2">&quot;,&quot;</span>b<span class="s2">&quot;:&quot;</span><span class="m">2</span><span class="s2">&quot;}}&quot;</span> http://127.0.0.1:3001/users/post
 </pre></div>
 <p>如不清楚，请 <code>man curl</code>.</p>
 
@@ -1397,6 +1403,51 @@ curl -d <span class="s2">&quot;{&quot;</span>a<span class="s2">&quot;:&quot;</sp
 <li>每日精进，自有成为大牛之日</li>
 </ul>
 
+<h1>TODO</h1>
+
+<ul>
+<li>浏览器请求完整过程</li>
+<li>浏览器渲染</li>
+</ul>
+
+<h1>web性能优化</h1>
+
+<ul>
+<li>01) 最简单的web server
+
+<ul>
+<li>node http</li>
+<li>connect</li>
+<li>express</li>
+</ul></li>
+<li>02) http-request
+
+<ul>
+<li>postman</li>
+<li>vscode debug</li>
+<li>req里的属性</li>
+</ul></li>
+<li>03) http-response
+
+<ul>
+<li>增加Expires 或 Cache-Control头部 </li>
+<li>配置 ETags </li>
+<li>Gzip压缩 </li>
+<li>Cookie</li>
+</ul></li>
+<li>04）网络优化
+
+<ul>
+<li>使用CDN </li>
+<li>压缩HTTP请求 </li>
+<li>减少 DNS 查询</li>
+<li>压缩 JavaScript 和 CSS </li>
+</ul></li>
+<li>05) 其他</li>
+</ul>
+
+<p>见<a href="webperformace/Doc.md">webperformace</a></p>
+
 			          	</article>
 			        </div>
 					</div>
@@ -1405,7 +1456,7 @@ curl -d <span class="s2">&quot;{&quot;</span>a<span class="s2">&quot;:&quot;</sp
 			<script type="text/javascript" src="toc/js/jquery-1.4.4.min.js"></script>
 			<script type="text/javascript" src="toc/js/jquery.ztree.all-3.5.min.js"></script>
 			<script type="text/javascript" src="toc/js/ztree_toc.js"></script>
-      <script type="text/javascript" src="toc/toc_conf.js"></script>
+      <script type="text/javascript" src="toc_conf.js"></script>
       
 			<SCRIPT type="text/javascript" >
 			<!--
