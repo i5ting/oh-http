@@ -1378,3 +1378,33 @@ curl -d "{"a":"1","b":"2","c":{"a":"1","b":"2"}}" http://127.0.0.1:3001/users/po
 - 浏览器请求完整过程
 - 浏览器渲染
 - web性能优化
+
+# web性能优化
+
+- 压缩HTTP请求 
+- 增加Expires 或 Cache-Control头部 
+- Gzip压缩 
+- 减少 DNS 查询
+- 配置 ETags 
+- 减少 Cookie 大小
+- 压缩 JavaScript 和 CSS 
+- 对组件使用 Cookie-Free 域名 
+
+- 使用CDN 
+- 避免空的src 或 href 
+- 将样式放在上面 
+- 将脚本放到下面 
+- 避免 CSS 表达式，降低样式计算的范围和复杂度 
+- 评估样式计算的成本 
+- 将JavaScript 和 CSS 放到外面 
+- 避免重定向 
+- 移除重复脚本和样式 
+
+- 缓存 AJAX 请求 
+- 使用GET 处理 AJAX 请求 
+- 减少DOM元素数量 
+- 不要 404 
+
+- 避免 Filters 
+- 在HTML里不使用 Scale Images 
+- 保持favicon.ico 比较小并可缓存 
